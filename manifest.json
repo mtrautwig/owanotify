@@ -1,0 +1,24 @@
+{
+
+  "manifest_version": 2,
+  "name": "Outlook Web Access Notifier",
+  "version": "1.0",
+  "description": "Shows Desktop notifications for events happening in Outlook Web Access.",
+
+  "icons": {
+  },
+
+  "applications": {
+      "gecko": {
+          "id": "owanotify-firefox-addon@trautwig.de"
+      }
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/owa/*"],
+      "js": ["content/owaext.js"]
+    }
+  ]
+
+}
