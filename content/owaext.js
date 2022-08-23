@@ -95,21 +95,39 @@ function checkNotificationButton(notificationType) {
     return 0;
 }
 
+function checkO365NotificationButton(notificationType) {
+    var el = document.querySelectorAll('#O365_' + notificationType + '_ButtonID .o365cs-flexPane-unseenitems');
+    if (el) {
+        return Array.from(el)
+            .map(e => /([0-9]+)/.exec(e.textContent))
+            .filter(a => a != null)
+            .map(a => a[1])
+            .reduce((a, b) => a+b, 0);
+    }
+    return 0;
+}
+
 // ---------------------
 // Main
 // ---------------------
 var favicon = new Favicon();
 var currentState = new State({
     mails: 0,
-    events: 0
+    events: 0,
+    notifications: 0
 });
 
 setInterval(function () {
 
-    var state = new State({
-        mails: checkNotificationButton('mail'),
-        events: checkNotificationButton('event')
-    });
+    try {
+        var state = new State({
+            mails: checkNotificationButton('mail'),
+            events: checkNotificationButton('event'),
+            notifications: checkO365NotificationButton('Notifications')
+        });
+    } catch (e) {
+        console.error(e);
+    }
 
     if (!state.equals(currentState)) {
         currentState = state;
@@ -120,6 +138,9 @@ setInterval(function () {
         }
         if (state.has('events')) {
             message += state.data.events + " Erinnerung(en)\n";
+        }
+        if (state.has('notifications')) {
+            message += state.data.notifications + " Benachrichtigung(en)\n";
         }
 
         if (message != '') {

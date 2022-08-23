@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "Outlook Web Access Notifier",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Shows Desktop notifications for events happening in Outlook Web Access.",
 
   "icons": {
