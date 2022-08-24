@@ -95,13 +95,13 @@ function checkNotificationButton(notificationType) {
     return 0;
 }
 
-function checkO365NotificationButton(notificationType) {
-    var el = document.querySelectorAll('#O365_' + notificationType + '_ButtonID .o365cs-flexPane-unseenitems');
+function checkO365NotificationPanel() {
+    var el = document.querySelectorAll('#NotificationsFlexPaneScrollRegion .o365cs-notifications-notificationLabel .o365cs-notifications-notificationHeaderText');
     if (el) {
         return Array.from(el)
-            .map(e => /([0-9]+)/.exec(e.textContent))
+            .map(e => /\(([0-9]+)\)/.exec(e.textContent))
             .filter(a => a != null)
-            .map(a => a[1])
+            .map(a => parseInt(a[1]))
             .reduce((a, b) => a+b, 0);
     }
     return 0;
@@ -123,7 +123,7 @@ setInterval(function () {
         var state = new State({
             mails: checkNotificationButton('mail'),
             events: checkNotificationButton('event'),
-            notifications: checkO365NotificationButton('Notifications')
+            notifications: checkO365NotificationPanel()
         });
     } catch (e) {
         console.error(e);
